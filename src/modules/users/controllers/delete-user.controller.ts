@@ -9,7 +9,7 @@ export class DeleteUserController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete user by id' })
-  async handle(@Param('id', ParseIntPipe) id: string) {
+  async handle(@Param('id') id: string) {
     return await this.service.execute(id);
   }
 }

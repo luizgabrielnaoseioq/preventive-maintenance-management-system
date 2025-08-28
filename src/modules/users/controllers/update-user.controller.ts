@@ -10,10 +10,7 @@ export class UpdateUserController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update user by id' })
-  async handle(
-    @Param('id', ParseIntPipe) id: string,
-    @Body() body: UpdateUserDto,
-  ) {
+  async handle(@Param('id') id: string, @Body() body: UpdateUserDto) {
     return await this.service.execute(id, body);
   }
 }
