@@ -15,30 +15,31 @@ datasource db {
 }
 
 model User {
-  id          Int           @id @default(autoincrement())
+  id          String           @id @default(uuid())
   name        String
   email       String        @unique
+  password    String
   role        UserRole
   equipments  Equipment[]   @relation("ClientEquipment")
   maintenances Maintenance[] @relation("TechnicianMaintenance")
 }
 
 model Equipment {
-  id           Int           @id @default(autoincrement())
+  id          String           @id @default(uuid())
   name         String
   description  String?
   location     String?
   client       User          @relation("ClientEquipment", fields: [clientId], references: [id])
-  clientId     Int
+  clientId     String
   maintenances Maintenance[]
 }
 
 model Maintenance {
-  id            Int          @id @default(autoincrement())
+  id          String           @id @default(uuid())
   equipment     Equipment    @relation(fields: [equipmentId], references: [id])
-  equipmentId   Int
+  equipmentId   String
   technician    User         @relation("TechnicianMaintenance", fields: [technicianId], references: [id])
-  technicianId  Int
+  technicianId  String
   scheduledDate DateTime
   status        MaintenanceStatus
   notes         String?
@@ -47,17 +48,17 @@ model Maintenance {
 }
 
 model Task {
-  id            Int          @id @default(autoincrement())
+  id          String           @id @default(uuid())
   maintenance   Maintenance  @relation(fields: [maintenanceId], references: [id])
-  maintenanceId Int
+  maintenanceId String
   description   String
   completed     Boolean      @default(false)
 }
 
 model History {
-  id            Int          @id @default(autoincrement())
+  id          String           @id @default(uuid())
   maintenance   Maintenance  @relation(fields: [maintenanceId], references: [id])
-  maintenanceId Int
+  maintenanceId String
   executedAt    DateTime     @default(now())
   notes         String?
 }
