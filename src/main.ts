@@ -10,6 +10,7 @@ async function bootstrap() {
     .setDescription(
       'System for equipment management and preventive maintenance.',
     )
+    .addBearerAuth()
     .setVersion('1.0')
     .addTag('<3')
     .build();

@@ -11,6 +11,7 @@ import { FindAllUsersService } from './services/find-all-users.service';
 import { FindOneUserService } from './services/find-one-user.service';
 import { UpdateUserService } from './services/update-user.service';
 import { DeleteUserService } from './services/delete-user.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   controllers: [
@@ -27,6 +28,7 @@ import { DeleteUserService } from './services/delete-user.service';
     FindOneUserService,
     UpdateUserService,
     DeleteUserService,
+    JwtService,
   ],
 })
 export class UserModule {}

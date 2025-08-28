@@ -20,18 +20,19 @@ model User {
   email       String        @unique
   password    String
   role        UserRole
-  equipments  Equipment[]   @relation("ClientEquipment")
   maintenances Maintenance[] @relation("TechnicianMaintenance")
+  equipment Equipment[]
 }
 
 model Equipment {
-  id          String           @id @default(uuid())
-  name         String
-  description  String?
-  location     String?
-  client       User          @relation("ClientEquipment", fields: [clientId], references: [id])
-  clientId     String
-  maintenances Maintenance[]
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  clientId    String
+  client      User   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  Maintenance Maintenance[]
 }
 
 model Maintenance {
