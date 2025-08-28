@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int           @id @default(autoincrement())
+  name        String
+  email       String        @unique
+  role        UserRole
+  equipments  Equipment[]   @relation("ClientEquipment")
+  maintenances Maintenance[] @relation("TechnicianMaintenance")
+}
+
+model Equipment {
+  id           Int           @id @default(autoincrement())
+  name         String
+  description  String?
+  location     String?
+  client       User          @relation("ClientEquipment", fields: [clientId], references: [id])
+  clientId     Int
+  maintenances Maintenance[]
+}
+
+model Maintenance {
+  id            Int          @id @default(autoincrement())
+  equipment     Equipment    @relation(fields: [equipmentId], references: [id])
+  equipmentId   Int
+  technician    User         @relation("TechnicianMaintenance", fields: [technicianId], references: [id])
+  technicianId  Int
+  scheduledDate DateTime
+  status        MaintenanceStatus
+  notes         String?
+  tasks         Task[]
+  histories     History[]
+}
+
+model Task {
+  id            Int          @id @default(autoincrement())
+  maintenance   Maintenance  @relation(fields: [maintenanceId], references: [id])
+  maintenanceId Int
+  description   String
+  completed     Boolean      @default(false)
+}
+
+model History {
+  id            Int          @id @default(autoincrement())
+  maintenance   Maintenance  @relation(fields: [maintenanceId], references: [id])
+  maintenanceId Int
+  executedAt    DateTime     @default(now())
+  notes         String?
+}
+
+enum UserRole {
+  admin
+  technician
+  client
+}
+
+enum MaintenanceStatus {
+  pending
+  completed
+  canceled
+}
